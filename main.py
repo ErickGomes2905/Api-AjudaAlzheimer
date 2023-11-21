@@ -19,7 +19,10 @@ medicamentos = {
 
 @app.get("/")
 def home():
-  return {"Medicamentos": len(medicamentos)}
+  return {"Medicamentos": len(medicamentos),
+        "Memorias": len(memorias),
+        "Pessoas Confiaveis": len(pessoasConfiaveis)}
+
 
 @app.get("/medicamentos")
 def pegar_medicamentos():
