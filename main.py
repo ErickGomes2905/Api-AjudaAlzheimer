@@ -2,6 +2,10 @@ from fastapi import FastAPI, HTTPException
 
 app = FastAPI()
 
+pessoasConfiaveis = {
+   1: {"nome": "Veronica Gomes", "Relação": "Filha", "Contato": "(11) 98745-2532"}
+}
+
 memorias = {
    1: {"data": "2023-10-21", "local": "Praia de Bertioga", "Pessoas Presentes": "erick (neto), joao (filho), maria (sobrinha)", "acontecimento": "Estavam na praia curtindo um sol quando começou uma tempestade que levou todas as coisas embora, perdemos todas as toalhas e coisas que estavam soltas"}
 }
@@ -104,3 +108,45 @@ def deletar_memoria(id_memoria: int):
         return {"message": f"Memoria {id_memoria} removido com sucesso"}
     else:
         raise HTTPException(status_code=404, detail="Id de memoria não encontrado")
+    
+@app.get("/pessoasConfiaveis")
+def pegar_pessoasConfiaveis():
+  return pessoasConfiaveis
+
+@app.get("/pessoasConfiaveis/{id_pessoaConfiavel}")
+def pegar_pessoaConfiavel(id_pessoaConfiavel: int):
+  if id_pessoaConfiavel in pessoasConfiaveis:
+    return pessoasConfiaveis[id_pessoaConfiavel]
+  else:
+    return {"Id de pessoa confiavel não encontrado"}
+  
+@app.post("/pessoasConfiaveis")
+def post_pessoaConfiavel(nome: str, relação: str, contato: str):
+    novo_id = max(pessoasConfiaveis.keys(), default=0) + 1
+    nova_pessoaConfiavel = {
+        "nome": nome,
+        "relação": relação,
+        "contato": contato,
+    }
+    pessoasConfiaveis[novo_id] = nova_pessoaConfiavel
+    return {"message": "pessoa confiavel adicionado com sucesso", "id_pessoaConfiavel": novo_id}
+
+@app.put("/pessoasConfiaveis/{id_pessoaconfiavel}")
+def atualizar_pessoaconfiavel(id_pessoaConfiavel: int, nome: str, relação: str, contato: str):
+    if id_pessoaConfiavel in pessoasConfiaveis:
+        pessoasConfiaveis[id_pessoaConfiavel] = {
+            "nome": nome,
+            "relação": relação,
+            "contato": contato
+        }
+        return {"message": f"Pessoa confiavel {id_pessoaConfiavel} atualizado com sucesso"}
+    else:
+        raise HTTPException(status_code=404, detail="Id de pessoa confiavel não encontrado")
+    
+@app.delete("/pessoasConfiaveis/{id_pessoaConfiavel}")
+def deletar_pessoaConfiavel(id_pessoaConfiavel: int):
+    if id_pessoaConfiavel in pessoasConfiaveis:
+        del pessoasConfiaveis[id_pessoaConfiavel]
+        return {"message": f"Pessoa confiavel {id_pessoaConfiavel} removido com sucesso"}
+    else:
+        raise HTTPException(status_code=404, detail="Id de pessoa confiavel não encontrado")
