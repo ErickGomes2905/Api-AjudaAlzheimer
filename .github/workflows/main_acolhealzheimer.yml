@@ -66,4 +66,4 @@ jobs:
         with:
           app-name: 'AcolheAlzheimer'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_31F77F4E5ACD48C4A6F13DA87DFE046D }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_755A634B04074AB5AB9C0F89BCAC2499 }}
