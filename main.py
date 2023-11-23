@@ -2,6 +2,10 @@ from fastapi import FastAPI, HTTPException
 
 app = FastAPI()
 
+usuarios = {
+   1: {"email": "rm95455@fiap.com.br", "senha": "123456789", "nome": "erick gomes"}
+}
+
 pessoasConfiaveis = {
    1: {"nome": "Veronica Gomes", "Relação": "Filha", "Contato": "(11) 98745-2532"}
 }
@@ -153,3 +157,27 @@ def deletar_pessoaConfiavel(id_pessoaConfiavel: int):
         return {"message": f"Pessoa confiavel {id_pessoaConfiavel} removido com sucesso"}
     else:
         raise HTTPException(status_code=404, detail="Id de pessoa confiavel não encontrado")
+    
+@app.get("/usuarios")
+def pegar_usuarios():
+  return usuarios
+
+@app.get("/usuarios/{email_usuario}")
+def pegar_usuario(email_usuario: str):
+    for usuario_id, dados_usuario in usuarios.items():
+        if dados_usuario["usuario"].lower() == email_usuario.lower():
+            return {usuario_id: dados_usuario}
+    
+    return {"Usuario não encontrado"}
+
+
+@app.post("/usuarios")
+def post_usuario(email: str, senha: str, nome: str):
+    novo_id = max(usuarios.keys(), default=0) + 1
+    novo_usuario = {
+        "email": email,
+        "senha": senha,
+        "nome": nome,
+    }
+    usuarios[novo_id] = novo_usuario
+    return {"message": "Usuario adicionado com sucesso", "id_usuario": novo_id}
