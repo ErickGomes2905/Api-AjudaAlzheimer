@@ -3,7 +3,7 @@ from fastapi import FastAPI, HTTPException
 app = FastAPI()
 
 usuarios = {
-   1: {"email": "rm95455@fiap.com.br", "senha": "123456789", "nome": "erick gomes"}
+   1: {"username": "erickgomes2905", "senha": "123456789", "nome": "erick gomes"}
 }
 
 pessoasConfiaveis = {
@@ -162,20 +162,20 @@ def deletar_pessoaConfiavel(id_pessoaConfiavel: int):
 def pegar_usuarios():
   return usuarios
 
-@app.get("/usuarios/{email_usuario}")
-def pegar_usuario(email_usuario: str):
+@app.get("/usuarios/{username_usuario}")
+def pegar_usuario(username_usuario: str):
     for usuario_id, dados_usuario in usuarios.items():
-        if dados_usuario["usuario"].lower() == email_usuario.lower():
+        if dados_usuario["username"].lower() == username_usuario.lower():
             return {usuario_id: dados_usuario}
     
     return {"Usuario não encontrado"}
 
 
 @app.post("/usuarios")
-def post_usuario(email: str, senha: str, nome: str):
+def post_usuario(username: str, senha: str, nome: str):
     novo_id = max(usuarios.keys(), default=0) + 1
     novo_usuario = {
-        "email": email,
+        "username": username,
         "senha": senha,
         "nome": nome,
     }
